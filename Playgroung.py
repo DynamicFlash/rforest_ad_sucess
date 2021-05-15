@@ -5,7 +5,7 @@ import numpy as np
 
 app = Flask(__name__)
 
-with open('./Model/rfc.pkl', 'rb+') as model_file:
+with open('./Model/prfc.pkl', 'rb+') as model_file:
     model = pickle.load(model_file)
 
 @app.route('/', methods= ['POST'])
@@ -14,7 +14,7 @@ def greeting():
     return "Hello " + msg
 
 @app.route('/file_in', methods = ['POST'])
-def social_media_ad_car():
+def social_media_ad_car_file():
     """Example file endpoint returning a prediction of ad
     ---
     parameters:
@@ -28,12 +28,11 @@ def social_media_ad_car():
     return str(list(prediction))
 
 @app.route('/single_in', methods = ['POST'])
-def social_media_ad_car():
-    age = request.args.get("age")
-    est_sal = request.args.get("estimated_sal")
-
+def social_media_ad_car_sig():
+    age = request.form["age"]
+    est_sal = request.form["estimated_sal"]
     prediction = model.predict(np.array([[age, est_sal]]))
     return str(prediction)
 
 if __name__=='__main__':
-    app.run()
+    app.run(port=8000)
